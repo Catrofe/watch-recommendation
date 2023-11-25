@@ -1,0 +1,13 @@
+version: "3"
+services:
+
+  DBpostgres:
+    image: postgres:14-alpine
+    container_name: WatchRecommendation
+    restart: always
+    environment:
+      - POSTGRES_DB=WatchRecommendation
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+    ports:
+      - 5432:5432

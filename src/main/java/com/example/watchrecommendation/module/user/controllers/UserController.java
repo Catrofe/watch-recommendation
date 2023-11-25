@@ -1,6 +1,7 @@
 package com.example.watchrecommendation.module.user.controllers;
 
 import com.example.watchrecommendation.module.user.dto.UserDto;
+import com.example.watchrecommendation.module.user.dto.UserEditDTO;
 import com.example.watchrecommendation.module.user.dto.UserRegister;
 import com.example.watchrecommendation.module.user.service.UserService;
 import jakarta.validation.Valid;
@@ -26,6 +27,12 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> findById(@PathVariable Long id){
         UserDto user = service.findById(id);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserDto> update(@PathVariable Long id, @RequestBody @Valid UserEditDTO userEdit){
+        UserDto user = service.update(id, userEdit);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 

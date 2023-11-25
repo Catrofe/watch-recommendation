@@ -4,6 +4,8 @@ import com.example.watchrecommendation.module.user.dto.UserDto;
 import com.example.watchrecommendation.module.user.dto.UserRegister;
 import com.example.watchrecommendation.module.user.entity.User;
 import com.example.watchrecommendation.module.user.repository.UserRepository;
+import com.example.watchrecommendation.module.utils.exceptions.ConflictException;
+import com.example.watchrecommendation.module.utils.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.record.RecordModule;
@@ -21,9 +23,17 @@ public class UserService {
     private final PasswordEncoder encoder;
 
     public UserDto insert(UserRegister userRegister) {
+        validNewUser(userRegister);
         User user = covertToEntity(userRegister);
         user.setPassword(encryptPassword(user.getPassword()));
         return convertToDto(userRepository.save(user));
+    }
+
+    private void validNewUser(UserRegister userRegister){
+        User user = userRepository.UserAlreadyExists(userRegister.cpf(), userRegister.email(), userRegister.phone());
+        if (user != null){
+            throw new ConflictException("Some of the data entered is already registered in our database.");
+        }
     }
 
     private String encryptPassword(String password){
@@ -43,7 +53,7 @@ public class UserService {
     }
 
     public UserDto findById(Long id) {
-        User user = userRepository.findById(id).orElseThrow();
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not yet registered"));
         return convertToDto(user);
     }
 }

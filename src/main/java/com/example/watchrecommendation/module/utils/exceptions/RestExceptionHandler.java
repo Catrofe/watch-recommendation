@@ -26,4 +26,10 @@ public class RestExceptionHandler {
         return ResponseEntity.status(exceptionDetails.statusCode()).body(exceptionDetails);
     }
 
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ExceptionDetails> handleBadRequestException(BadRequestException exception) {
+        ExceptionDetails exceptionDetails = new ExceptionDetails(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
+        return ResponseEntity.status(exceptionDetails.statusCode()).body(exceptionDetails);
+    }
+
 }

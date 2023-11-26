@@ -59,7 +59,21 @@ public class JwtService {
     public void isTokenValid(String token) {
         try{
             TypeToken typeToken = TypeToken.getTypeToken(JWT.decode(token).getClaim("typeToken").asString());
-            Algorithm algorithm = Algorithm.HMAC256(typeToken == TypeToken.ACCESSTOKEN ? secret : secretRefresh);
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .withIssuer("auth0")
+                    .build();
+
+            decodedJWT = verifier.verify(token);
+        } catch (Exception e) {
+            throw new UnauthorizedException("Unauthorized!");
+        }
+    }
+
+    public void isRefreshTokenValid(String token) {
+        try{
+            Algorithm algorithm = Algorithm.HMAC256(secretRefresh);
 
             JWTVerifier verifier = JWT.require(algorithm)
                     .withIssuer("auth0")

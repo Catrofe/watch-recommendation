@@ -20,7 +20,6 @@ public class AuthService {
     }
 
     public LoginReturnSuccesDto refresh(String refreshToken) {
-        jwtService.isTokenValid(refreshToken);
         long id = jwtService.getId(refreshToken);
         UserDto userDto = userService.findById(id);
         return jwtService.createTokens(userDto);

@@ -86,5 +86,9 @@ public class UserService {
         return convertToDto(user);
     }
 
+    public User getUserEntityById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not yet registered"));
+    }
+
 
 }

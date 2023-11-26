@@ -78,5 +78,13 @@ public class UserService {
         return modelMapper.map(user, UserDto.class);
     }
 
+    public UserDto login(String login, String password) {
+        User user = userRepository.findByLogin(login);
+        if (user == null || !passwordMatch(password, user.getPassword())) {
+            throw new NotFoundException("User not yet registered");
+        }
+        return convertToDto(user);
+    }
+
 
 }

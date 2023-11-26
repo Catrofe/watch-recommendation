@@ -7,6 +7,7 @@ import com.example.watchrecommendation.module.streaming.repository.StreamingRepo
 import com.example.watchrecommendation.module.user.repository.UserRepository;
 import com.example.watchrecommendation.module.utils.exceptions.ConflictException;
 import com.example.watchrecommendation.module.utils.exceptions.NotFoundException;
+import com.example.watchrecommendation.module.utils.exceptions.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.modelmapper.ModelMapper;
@@ -58,5 +59,42 @@ public class StreamingService {
     public StreamingDto getStreamingById(Long id) {
         Streaming streaming = repository.findById(id).orElseThrow(() -> new NotFoundException("Streaming not found"));
         return convertToDto(streaming);
+    }
+
+
+    public void deleteStreamingById(Long id, Long idUser) throws UnauthorizedException {
+        Streaming streaming = repository.findById(id).orElseThrow(() -> new NotFoundException("Streaming not found"));
+        if (streaming.getUser().getId().equals(idUser)) {
+            repository.deleteById(id);
+        } else {
+            throw new UnauthorizedException("You can only delete your own streaming");
+        }
+    }
+
+    public StreamingDto updateStreamingById(Long id, SaveStreaming streamingDto, Long idUser) throws UnauthorizedException {
+        Streaming streaming = repository.findById(id).orElseThrow(() -> new NotFoundException("Streaming not found"));
+        if (streaming.getUser().getId().equals(idUser)) {
+            if (streamingDto.name() != null) {
+                streaming.setName(streamingDto.name());
+            }
+            if (streamingDto.url() != null) {
+                streaming.setUrl(streamingDto.url());
+            }
+
+            return convertToDto(repository.save(streaming));
+        } else {
+            throw new UnauthorizedException("You can only update your own streaming");
+        }
+    }
+
+
+    public List<StreamingDto> getStreamingByFilter(String name) {
+        List<Streaming> streaming = repository.findByNameIgnoreCaseContaining(name);
+        if (streaming == null) throw new NotFoundException("Streaming not found");
+        List<StreamingDto> streamingDto = new ArrayList<>();
+        for (Streaming s : streaming) {
+            streamingDto.add(convertToDto(s));
+        }
+        return streamingDto;
     }
 }

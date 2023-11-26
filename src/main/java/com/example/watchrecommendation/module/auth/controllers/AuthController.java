@@ -3,7 +3,6 @@ package com.example.watchrecommendation.module.auth.controllers;
 import com.example.watchrecommendation.module.auth.dto.LoginDto;
 import com.example.watchrecommendation.module.auth.dto.LoginReturnSuccesDto;
 import com.example.watchrecommendation.module.auth.service.AuthService;
-import com.example.watchrecommendation.module.user.dto.UserDto;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

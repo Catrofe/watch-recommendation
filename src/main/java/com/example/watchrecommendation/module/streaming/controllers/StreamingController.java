@@ -7,7 +7,6 @@ import com.example.watchrecommendation.module.utils.exceptions.ConflictException
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +30,12 @@ public class StreamingController {
     @GetMapping
     public ResponseEntity<List<StreamingDto>> getAllStreaming(){
         List<StreamingDto> streaming = service.getAllStreaming();
+        return new ResponseEntity<>(streaming, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<StreamingDto> getStreamingById(@PathVariable Long id){
+        StreamingDto streaming = service.getStreamingById(id);
         return new ResponseEntity<>(streaming, HttpStatus.OK);
     }
 

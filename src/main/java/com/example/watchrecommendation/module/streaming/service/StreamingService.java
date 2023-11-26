@@ -55,4 +55,8 @@ public class StreamingService {
         return requests;
     }
 
+    public StreamingDto getStreamingById(Long id) {
+        Streaming streaming = repository.findById(id).orElseThrow(() -> new NotFoundException("Streaming not found"));
+        return convertToDto(streaming);
+    }
 }

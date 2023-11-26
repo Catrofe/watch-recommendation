@@ -8,20 +8,23 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/login")
+@RequestMapping("/api")
 public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping
+    @PostMapping("/login")
     public ResponseEntity<LoginReturnSuccesDto> login(@Valid @RequestBody LoginDto loginDto) {
         return new ResponseEntity<>(authService.login(loginDto), HttpStatus.OK);
     }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<LoginReturnSuccesDto> refresh(@RequestHeader("Authorization") String refreshToken) {
+        return new ResponseEntity<>(authService.refresh(refreshToken), HttpStatus.OK);
+    }
+
 }

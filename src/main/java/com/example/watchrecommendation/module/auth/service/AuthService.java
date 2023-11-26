@@ -18,4 +18,10 @@ public class AuthService {
         UserDto userDto = userService.login(loginDto.login(), loginDto.password());
         return jwtService.createTokens(userDto);
     }
+
+    public LoginReturnSuccesDto refresh(String refreshToken) {
+        long id = jwtService.getId(refreshToken);
+        UserDto userDto = userService.findById(id);
+        return jwtService.createTokens(userDto);
+    }
 }

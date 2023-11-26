@@ -20,4 +20,10 @@ public class RestExceptionHandler {
         return ResponseEntity.status(exceptionDetails.statusCode()).body(exceptionDetails);
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ExceptionDetails> handleUnauthorizedException(UnauthorizedException exception) {
+        ExceptionDetails exceptionDetails = new ExceptionDetails(HttpStatus.UNAUTHORIZED.value(), exception.getMessage());
+        return ResponseEntity.status(exceptionDetails.statusCode()).body(exceptionDetails);
+    }
+
 }

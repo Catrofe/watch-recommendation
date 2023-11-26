@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.example.watchrecommendation.module.auth.dto.LoginReturnSuccesDto;
 import com.example.watchrecommendation.module.user.dto.UserDto;
+import com.example.watchrecommendation.module.utils.exceptions.UnauthorizedException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -39,7 +40,11 @@ public class JwtService {
     }
 
     public long getId(String token) {
+        try{
         return JWT.decode(token).getClaim("id").asLong();
+        } catch (Exception e) {
+            throw new UnauthorizedException("Unauthorized!");
+        }
     }
 
 

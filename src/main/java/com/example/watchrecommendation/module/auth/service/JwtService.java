@@ -47,17 +47,11 @@ public class JwtService {
     }
 
     public long getId(String token) {
-        try{
-            if (isTokenValid(token)){
-                return decodedJWT.getClaim("id").asLong();
-            }
-            throw new UnauthorizedException("Unauthorized!");
-        } catch (Exception e) {
-            throw new UnauthorizedException("Unauthorized!");
-        }
+        isTokenValid(token);
+        return decodedJWT.getClaim("id").asLong();
     }
 
-    public boolean isTokenValid(String token) {
+    public void isTokenValid(String token) {
         try{
             TypeToken typeToken = TypeToken.getTypeToken(JWT.decode(token).getClaim("typeToken").asString());
             Algorithm algorithm = Algorithm.HMAC256(typeToken == TypeToken.ACCESSTOKEN ? secret : secretRefresh);
@@ -67,7 +61,6 @@ public class JwtService {
                     .build();
 
             decodedJWT = verifier.verify(token);
-            return true;
         } catch (Exception e) {
             throw new UnauthorizedException("Unauthorized!");
         }

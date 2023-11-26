@@ -5,4 +5,3 @@
 - [ ] Criar Crud de usuarios.
 - [ ] Criar Crud de Streaming de dados.
 - [ ] Criar Crud de recomendações.
-- [ ] 

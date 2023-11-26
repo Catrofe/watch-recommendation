@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum TypeToken {
-    ACCESSTOKEN("AcessToken"),
+    ACCESSTOKEN("AccessToken"),
     REFRESHTOKEN("RefreshToken");
 
     private final String typeToken;

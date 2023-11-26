@@ -26,6 +26,7 @@ public class JwtService {
                 .withClaim("name", user.getName())
                 .withClaim("expiresInSeconds", 3600)
                 .withClaim("typeToken", "AccessToken")
+                .withClaim("email", user.getEmail())
                 .withExpiresAt(new java.util.Date(System.currentTimeMillis() + 3600 * 1000))
                 .sign(algorithm);
     }
@@ -38,6 +39,7 @@ public class JwtService {
                 .withClaim("name", user.getName())
                 .withClaim("expiresInSeconds", 1800)
                 .withClaim("typeToken", "RefreshToken")
+                .withClaim("email", user.getEmail())
                 .withExpiresAt(new java.util.Date(System.currentTimeMillis() + 1800 * 1000))
                 .sign(algorithm);
     }
@@ -47,8 +49,11 @@ public class JwtService {
     }
 
     public long getId(String token) {
-        isTokenValid(token);
         return decodedJWT.getClaim("id").asLong();
+    }
+
+    public String getEmail(String token) {
+        return decodedJWT.getClaim("email").asString();
     }
 
     public void isTokenValid(String token) {

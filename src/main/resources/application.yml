@@ -15,7 +15,3 @@ spring:
     hibernate:
       ddl-auto: create
     open-in-view: false
-
-jwt:
-  secret: 8pxTH7h8yk@8#jAZjDGaHv%d%fWqUr9zR!4WTzbJ
-  expiration: 19999999

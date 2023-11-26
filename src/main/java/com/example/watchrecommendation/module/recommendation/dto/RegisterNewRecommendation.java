@@ -1,7 +1,5 @@
 package com.example.watchrecommendation.module.recommendation.dto;
 
-import com.example.watchrecommendation.module.recommendation.entity.TypeRecommendation;
-import com.example.watchrecommendation.module.utils.exceptions.BadRequestException;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

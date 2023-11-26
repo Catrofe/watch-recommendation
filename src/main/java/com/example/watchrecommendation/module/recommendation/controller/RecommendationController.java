@@ -9,10 +9,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/recommendation")
@@ -25,5 +24,10 @@ public class RecommendationController {
     public ResponseEntity<RecommendationDto> create(@Valid @RequestBody RegisterNewRecommendation recommendation, HttpServletRequest request) {
         Long id = (Long) request.getAttribute("id");
         return new ResponseEntity<>(service.create(recommendation, id), HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<RecommendationDto>> getAllRecommendation() {
+        return new ResponseEntity<>(service.getAllRecommendation(), HttpStatus.OK);
     }
 }

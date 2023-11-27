@@ -4,4 +4,4 @@
 - [ ] Criar Secrets com base em UUID personalizados por usúario.
 - [ ] Criar Crud de usuarios.
 - [x] Criar Crud de Streaming de dados.
-- [ ] Criar Crud de recomendações.
+- [x] Criar Crud de recomendações.

@@ -1,6 +1,7 @@
 package com.example.watchrecommendation.module.streaming.entity;
 
 import com.example.watchrecommendation.module.user.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,6 +19,7 @@ public class Streaming {
     private String url;
 
     @ManyToOne
+    @JsonIgnore
     private User user;
 
 }

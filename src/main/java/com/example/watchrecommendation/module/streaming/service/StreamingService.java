@@ -61,7 +61,6 @@ public class StreamingService {
         return convertToDto(streaming);
     }
 
-
     public void deleteStreamingById(Long id, Long idUser) throws UnauthorizedException {
         Streaming streaming = repository.findById(id).orElseThrow(() -> new NotFoundException("Streaming not found"));
         if (streaming.getUser().getId().equals(idUser)) {
@@ -87,7 +86,6 @@ public class StreamingService {
         }
     }
 
-
     public List<StreamingDto> getStreamingByFilter(String name) {
         List<Streaming> streaming = repository.findByNameIgnoreCaseContaining(name);
         if (streaming == null) throw new NotFoundException("Streaming not found");
@@ -96,5 +94,9 @@ public class StreamingService {
             streamingDto.add(convertToDto(s));
         }
         return streamingDto;
+    }
+
+    public Streaming getStreamingEntityById(Long id) {
+        return repository.findById(id).orElseThrow(() -> new NotFoundException("Streaming not found"));
     }
 }

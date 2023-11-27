@@ -30,4 +30,18 @@ public class RecommendationController {
     public ResponseEntity<List<RecommendationDto>> getAllRecommendation() {
         return new ResponseEntity<>(service.getAllRecommendation(), HttpStatus.OK);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<RecommendationDto> update(@Valid @RequestBody RegisterNewRecommendation recommendation, HttpServletRequest request) {
+        Long id = (Long) request.getAttribute("id");
+        return new ResponseEntity<>(service.update(recommendation, id), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id, HttpServletRequest request) {
+        Long userId = (Long) request.getAttribute("id");
+        service.delete(id, userId);
+        return new ResponseEntity<>("Recommendation deleted successfully", HttpStatus.OK);
+    }
+
 }

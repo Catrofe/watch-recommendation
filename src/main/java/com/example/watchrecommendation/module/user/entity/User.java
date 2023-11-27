@@ -25,6 +25,10 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String phone;
 
+    private String tokenAssignature;
+
+    private String birthDate;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return new ArrayList<>();

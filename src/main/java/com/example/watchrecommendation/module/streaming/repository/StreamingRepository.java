@@ -12,6 +12,6 @@ public interface StreamingRepository extends JpaRepository<Streaming, Long> {
     @Query(value = "SELECT * FROM streaming WHERE name = :name OR url = :url", nativeQuery = true)
     Streaming streamingAlreadyExists(String name, String url);
 
-    @Query("SELECT s FROM Streaming s WHERE UPPER(s.name) LIKE UPPER(:name)")
+    @Query("SELECT s FROM Streaming s WHERE s.name ILIKE %:name% OR s.url ILIKE %:name%")
     List<Streaming> findByNameIgnoreCaseContaining(@Param("name") String name);
 }

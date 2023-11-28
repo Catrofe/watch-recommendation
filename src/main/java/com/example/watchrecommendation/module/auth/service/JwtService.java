@@ -53,7 +53,7 @@ public class JwtService {
         return decodedJWT.getClaim("email").asString();
     }
 
-    public void isTokenValid(String token, User user, Boolean isRefresh) {
+    public void isTokenValid(String token, User user, Boolean isRefresh) throws UnauthorizedException {
         try{
             DecodedJWT decodedJWT = JWT.decode(token);
             Algorithm algorithm = Algorithm.HMAC256(isRefresh ? user.getRefreshTokenAssignature() : user.getTokenAssignature());

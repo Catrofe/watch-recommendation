@@ -1,6 +1,7 @@
 package com.example.watchrecommendation.module.auth.service;
 
 import com.example.watchrecommendation.module.user.service.UserDetailsServiceImpl;
+import com.example.watchrecommendation.module.utils.exceptions.UnauthorizedException;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -24,9 +25,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private UserDetailsServiceImpl userService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = request.getHeader("Authorization");
-        if (token != null) {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, UnauthorizedException {
+        String rawToken = request.getHeader("Authorization");
+        if (rawToken != null) {
+            String token = rawToken.replace("Bearer ", "");
             UsernamePasswordAuthenticationToken authenticationToken = getAuthentication(token, request.getRequestURI());
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             request.setAttribute("id", jwtService.getId(token));
@@ -35,10 +37,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     }
 
-    private UsernamePasswordAuthenticationToken getAuthentication(String token, String uri) {
-        token = token.replace("Bearer ", "");
+    private UsernamePasswordAuthenticationToken getAuthentication(String token, String uri) throws UnauthorizedException {
         Boolean isRefresh = uri.equals("/api/refresh");
-        String email = jwtService.getEmail(token);
         UserDetails userDetails = userService.loadUserByUsername(jwtService.getEmail(token));
         jwtService.isTokenValid(token, userService.findById(jwtService.getId(token)), isRefresh);
         return new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null, userDetails.getAuthorities());

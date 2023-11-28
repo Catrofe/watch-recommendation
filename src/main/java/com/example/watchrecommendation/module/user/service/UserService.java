@@ -108,4 +108,10 @@ public class UserService {
         return uuid.toString().replace("-", "");
     }
 
+    public void logout(long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not yet registered"));
+        user.setTokenAssignature(null);
+        user.setRefreshTokenAssignature(null);
+        userRepository.save(user);
+    }
 }

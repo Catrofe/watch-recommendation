@@ -25,7 +25,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        request.setAttribute("Authorization", "");
         String token = request.getHeader("Authorization");
         if (token != null) {
             UsernamePasswordAuthenticationToken authenticationToken = getAuthentication(token, request.getRequestURI());
@@ -38,13 +37,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private UsernamePasswordAuthenticationToken getAuthentication(String token, String uri) {
         token = token.replace("Bearer ", "");
-        if (uri.equals("/api/refresh")){
-            jwtService.isRefreshTokenValid(token);
-            UserDetails userDetails = userService.loadUserByUsername(jwtService.getEmail(token));
-            return new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null, userDetails.getAuthorities());
-        }
-        jwtService.isTokenValid(token);
+        Boolean isRefresh = uri.equals("/api/refresh");
+        String email = jwtService.getEmail(token);
         UserDetails userDetails = userService.loadUserByUsername(jwtService.getEmail(token));
+        jwtService.isTokenValid(token, userService.findById(jwtService.getId(token)), isRefresh);
         return new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null, userDetails.getAuthorities());
 
 

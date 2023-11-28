@@ -13,6 +13,8 @@ import org.modelmapper.record.RecordModule;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -78,17 +80,32 @@ public class UserService {
         return modelMapper.map(user, UserDto.class);
     }
 
+    private User saveNewAssignatureToken(User user){
+        user.setTokenAssignature(returnNewTokenAssignature(user));
+        user.setRefreshTokenAssignature(returnNewTokenAssignature(user));
+        return userRepository.save(user);
+    }
+
     public UserDto login(String login, String password) {
         User user = userRepository.findByLogin(login);
         if (user == null || !passwordMatch(password, user.getPassword())) {
             throw new NotFoundException("User not yet registered");
         }
-        return convertToDto(user);
+        return convertToDto(saveNewAssignatureToken(user));
+    }
+
+    public UserDto refreshToken(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not yet registered"));
+        return convertToDto(saveNewAssignatureToken(user));
     }
 
     public User getUserEntityById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not yet registered"));
     }
 
+    private String returnNewTokenAssignature(User user){
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString().replace("-", "");
+    }
 
 }

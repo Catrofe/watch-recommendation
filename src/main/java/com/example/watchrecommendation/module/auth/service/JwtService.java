@@ -13,9 +13,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class JwtService {
 
-    String secret = System.getenv("SECRET_KEY_JWT");
-    String secretRefresh = System.getenv("SECRET_KEY_REFRESH");
-
     public String createToken(UserDto user) {
         Algorithm algorithm = Algorithm.HMAC256(user.getTokenAssignature());
         return JWT.create()

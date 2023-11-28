@@ -21,7 +21,12 @@ public class AuthService {
 
     public LoginReturnSuccesDto refresh(String refreshToken) {
         long id = jwtService.getId(refreshToken);
-        UserDto userDto = userService.findById(id);
+        UserDto userDto = userService.refreshToken(id);
         return jwtService.createTokens(userDto);
+    }
+
+    public void logout(String refreshToken) {
+        long id = jwtService.getId(refreshToken);
+        userService.logout(id);
     }
 }

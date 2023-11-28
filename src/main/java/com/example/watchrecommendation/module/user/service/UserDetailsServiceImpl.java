@@ -1,6 +1,8 @@
 package com.example.watchrecommendation.module.user.service;
 
+import com.example.watchrecommendation.module.user.entity.User;
 import com.example.watchrecommendation.module.user.repository.UserRepository;
+import com.example.watchrecommendation.module.utils.exceptions.NotFoundException;
 import com.example.watchrecommendation.module.utils.exceptions.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,5 +22,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .findByEmail(username)
                 .orElseThrow(() ->
                         new UnauthorizedException("User not found with email: " + username));
+    }
+
+    public User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not yet registered"));
     }
 }

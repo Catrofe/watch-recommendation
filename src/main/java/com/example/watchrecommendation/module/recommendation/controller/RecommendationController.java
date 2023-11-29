@@ -31,6 +31,11 @@ public class RecommendationController {
         return new ResponseEntity<>(service.getAllRecommendation(), HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<RecommendationDto> getRecommendationById(@PathVariable Long id) {
+        return new ResponseEntity<>(service.getRecommendationById(id), HttpStatus.OK);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<RecommendationDto> update(@Valid @RequestBody RegisterNewRecommendation recommendation, HttpServletRequest request) {
         Long id = (Long) request.getAttribute("id");

@@ -6,6 +6,7 @@ import com.example.watchrecommendation.module.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -21,7 +22,7 @@ public class Recommendation {
     private String genre;
     private TypeRecommendation type;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "recommendation")
     private List<Like> like;
 
     @ManyToOne
@@ -29,5 +30,4 @@ public class Recommendation {
 
     @ManyToOne
     private Streaming streaming;
-
 }

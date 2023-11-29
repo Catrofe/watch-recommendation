@@ -40,8 +40,8 @@ public class StreamingController {
         return new ResponseEntity<>(streaming, HttpStatus.OK);
     }
 
-    @GetMapping("/filter")
-    public ResponseEntity<List<StreamingDto>> getStreamingByFilter(@RequestParam(required = false) String name){
+    @GetMapping("/name/{name}")
+    public ResponseEntity<List<StreamingDto>> getStreamingByFilter(@PathVariable String name){
         List<StreamingDto> streaming = service.getStreamingByFilter(name);
         return new ResponseEntity<>(streaming, HttpStatus.OK);
     }

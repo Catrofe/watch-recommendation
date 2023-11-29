@@ -21,5 +21,7 @@ public class RecommendationDto {
     private String streamingUrl;
     private Long userId;
     private String userName;
+    private Long likeCount;
+    private Long dislikeCount;
 
 }

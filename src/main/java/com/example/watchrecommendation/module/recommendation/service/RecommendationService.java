@@ -1,5 +1,6 @@
 package com.example.watchrecommendation.module.recommendation.service;
 
+import com.example.watchrecommendation.module.interaction.entity.Like;
 import com.example.watchrecommendation.module.recommendation.dto.RecommendationDto;
 import com.example.watchrecommendation.module.recommendation.dto.RegisterNewRecommendation;
 import com.example.watchrecommendation.module.recommendation.entity.Recommendation;
@@ -10,6 +11,7 @@ import com.example.watchrecommendation.module.streaming.entity.Streaming;
 import com.example.watchrecommendation.module.streaming.service.StreamingService;
 import com.example.watchrecommendation.module.user.service.UserService;
 import com.example.watchrecommendation.module.utils.exceptions.BadRequestException;
+import com.example.watchrecommendation.module.utils.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.record.RecordModule;
@@ -47,6 +49,10 @@ public class RecommendationService {
         return requests;
     }
 
+    public RecommendationDto getRecommendationById(Long id) {
+        return convertToDto(repository.findById(id).orElseThrow());
+    }
+
     public RecommendationDto update(RegisterNewRecommendation body, Long id) throws BadRequestException {
         Recommendation newRecommendation = repository.findById(id).orElseThrow();
         if (!newRecommendation.getUser().getId().equals(id)) {
@@ -78,9 +84,13 @@ public class RecommendationService {
         recommendationDto.setStreamingName(recommendation.getStreaming().getName());
         recommendationDto.setStreamingUrl(recommendation.getStreaming().getUrl());
         recommendationDto.setUserName(recommendation.getUser().getName());
+        recommendationDto.setLikeCount(recommendation.getLike().stream().filter(Like::getIsLike).count());
+        recommendationDto.setDislikeCount(recommendation.getLike().stream().filter(like -> !like.getIsLike()).count());
         return recommendationDto;
     }
 
-
+    public Recommendation getRecommendationEntityById(Long id) {
+        return repository.findById(id).orElseThrow();
+    }
 
 }

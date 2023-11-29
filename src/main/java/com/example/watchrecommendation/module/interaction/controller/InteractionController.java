@@ -29,10 +29,10 @@ public class InteractionController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/like/{likeId}")
-    public ResponseEntity<Void> deleteLike(@PathVariable Long likeId, HttpServletRequest request) {
+    @DeleteMapping("/like/{recommendationId}")
+    public ResponseEntity<Void> deleteLike(@PathVariable Long recommendationId, HttpServletRequest request) {
         Long userId = (Long) request.getAttribute("id");
-        service.deleteLike(likeId, userId);
+        service.deleteLike(recommendationId, userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

@@ -19,6 +19,7 @@ public class InteractionService {
 
 
     public void like(NewLikeSave newLikeSave, Long id) {
+        validNewLike(newLikeSave, id);
         Like like = new Like();
         like.setIsLike(newLikeSave.like());
         like.setRecommendation((recommendationService.getRecommendationEntityById(newLikeSave.recommendationId())));
@@ -28,15 +29,24 @@ public class InteractionService {
 
     public void updateLike(NewLikeSave newLikeSave, Long userId) {
         Like like = likeRepository.FindLike(userId, newLikeSave.recommendationId());
+        if (like == null) {
+            throw new BadRequestException("You are not allowed to delete this like");
+        }
         like.setIsLike(newLikeSave.like());
         likeRepository.save(like);
     }
 
-    public void deleteLike(Long likeId, Long userId) {
-        Like like = likeRepository.findById(likeId).orElseThrow();
-        if (!userId.equals(like.getUser().getId())) {
+    public void deleteLike(Long recommendationId, Long userId) {
+        Like like = likeRepository.FindLike(userId, recommendationId);
+        if (like == null) {
             throw new BadRequestException("You are not allowed to delete this like");
         }
         likeRepository.delete(like);
+    }
+
+    private void validNewLike(NewLikeSave newLikeSave, Long userId) {
+        if (likeRepository.FindLike(userId, newLikeSave.recommendationId()) != null) {
+            throw new BadRequestException("You already liked this recommendation");
+        }
     }
 }

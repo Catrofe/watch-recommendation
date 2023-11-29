@@ -81,6 +81,8 @@ public class RecommendationService {
         return recommendationDto;
     }
 
-
+    public Recommendation getRecommendationEntityById(Long id) {
+        return repository.findById(id).orElseThrow();
+    }
 
 }
